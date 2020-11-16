@@ -29,12 +29,7 @@ io.on('connection', async (socket) => {
 		res(location);
 	})
 
-	socket.on('inputLocation', async (string, res) => {
-		const location = await updateLocation(string);
-		res(location);
-	})
-
-	socket.on('userLocation', async (pos, res) => {
+	socket.on('getLocation', async (pos, res) => {
 		const location = await updateLocation(pos);
 		res(location);
 	})

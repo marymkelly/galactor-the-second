@@ -8,25 +8,23 @@ socket.emit('join', (res) => {
 	$infoDiv.innerHTML = '<strong>' + res + '</strong>';
 })
 
-const $locationForm = document.querySelector('#location-form');
 const $locationInput = document.querySelector('#location-input');
-const $userLocation = document.querySelector('#send-location');
 const $infoDiv = document.querySelector('#infoDiv2');
 
-$locationForm.addEventListener('submit',  (e) => {
+document.querySelector('#location-form').addEventListener('submit',  (e) => {
 	e.preventDefault();
 	const location = $locationInput.value;
 
 	$locationInput.value = '';
 	$infoDiv.innerHTML = 'Loading....';
 
-	socket.emit('inputLocation', location, (res) => {
+	socket.emit('getLocation', location, (res) => {
 		$infoDiv.innerHTML = '<strong>' + res + '</strong>';
 	});
   })
 
 //get user location
-$userLocation.addEventListener('click', (e) => {
+document.querySelector('#send-location').addEventListener('click', (e) => {
 	e.preventDefault();
 
 	if(!navigator.geolocation){
@@ -34,8 +32,7 @@ $userLocation.addEventListener('click', (e) => {
 	}
 	$infoDiv.innerHTML = 'Loading....';
 	navigator.geolocation.getCurrentPosition((position) => {
-		socket.emit('userLocation', { lat: position.coords.latitude, lng: position.coords.longitude }, (location) => {
-			//console.log('Location name', location);
+		socket.emit('getLocation', { lat: position.coords.latitude, lng: position.coords.longitude }, (location) => {
 			$infoDiv.innerHTML = '<strong>' + location + '</strong>';
 		});
 	})

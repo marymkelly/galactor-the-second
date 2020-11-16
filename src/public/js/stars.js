@@ -23,7 +23,6 @@ let aladin = A.aladin('#aladin-lite-div',
 let aladinFocused = A.aladin('#aladin-lite-div2',
                   {
                     survey: 'P/DSS2/color', // set initial image survey
-                    fov: .5, // initial field of view in degrees
                     cooFrame: 'ICRSd', // set galactic frame
                     showReticle: false,
                     showZoomControl: false,// the zoom control GUI is displayed (plus/minus buttons)	
@@ -45,9 +44,6 @@ $leftBtn.addEventListener('click', () => { getNextSource('left') });
 aladin.setFovRange(35, 40)
 aladin.setFov(40)
 aladinFocused.setFovRange(.3, 2)
-aladin.removeLayers()
-
-
 
 socket.on('starData', (data) => {  
   const sourcesArr = [];
@@ -57,10 +53,9 @@ socket.on('starData', (data) => {
     aladin.view.catalogs[0].sources = [];
     aladin.view.catalogs.pop()
   }
-  //update view containers based off user location
+  //update aladin catalog view container based off user location
   aladin.gotoRaDec(userLocation.ra, userLocation.dec)
-  aladinFocused.gotoRaDec(userLocation.ra, userLocation.dec)
-  
+
   //push each star formatted as catalog source items
   starArr.forEach((item) => {
     sourcesArr.push(A.source(item.ra[0], item.de[0], { name: item.catId[0] , target: item.target[0]}));  
@@ -68,7 +63,7 @@ socket.on('starData', (data) => {
   //create catalog
   aladin.addCatalog(cat);
   cat.addSources(sourcesArr);
-  //update aladin container
+  //update aladin focused container
   updateStarView(sourcesArr[0]);
 })
 
@@ -80,6 +75,7 @@ aladin.on('objectHovered', function(object) {
   }
   else {
     $infoLineOne.innerHTML = 'Currently Selected <strong>' + objSelected.data.name + '</strong>';
+    aladinFocused.gotoObject(objSelected.data.target);
   }
 });
 // define function triggered when an object is clicked
@@ -95,7 +91,6 @@ aladin.on('objectClicked', function(object) {
       updateStarView(objSelected); //will prevent deselect when clicking outside of source object
   }
 });
-
 
 function getNextSource(btn) { //changes selected source based on left and right buttons
   let nextSource;
