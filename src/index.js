@@ -12,7 +12,7 @@ const geoLocate = require('./utils/geocode');
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 //express 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -42,6 +42,7 @@ io.on('connection', async (socket) => {
 	async function updateLocation (data){
 		try {
 			const location = await geoLocate(data);
+			console.log(location);
 			await getStars(location.coords.ra, location.coords.dec).then((res) => {
 				socket.emit('starData', { res: res, loc: location.coords });
 			})

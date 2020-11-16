@@ -4,6 +4,7 @@ const xml2js = require('xml2js');
 	async function getStars(ra = 12, dec = 45) {
 		//retrieve nearby stars from database
 		const getStarsUrl = `http://server2.sky-map.org/getstars.jsp?ra=${ra}&de=${dec}&angle=30&max_stars=10`;
+		
 		try {
 			let response = await axios.get(getStarsUrl);
 			let parsedData = await xml2js.parseStringPromise(response.data, {trim: true}) 
@@ -24,7 +25,7 @@ const xml2js = require('xml2js');
 					return console.log(e);
 				}
 			});
-			//wait for promises in map to resolve
+			// wait for promises in map to resolve
 			const validateResults = await Promise.all(validateStars);
 			//filter out undefined values and return star objects as array
 			const stars = validateResults.filter((stars) => stars);	

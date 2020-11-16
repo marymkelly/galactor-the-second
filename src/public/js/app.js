@@ -35,7 +35,7 @@ $userLocation.addEventListener('click', (e) => {
 	$infoDiv.innerHTML = 'Loading....';
 	navigator.geolocation.getCurrentPosition((position) => {
 		socket.emit('userLocation', { lat: position.coords.latitude, lng: position.coords.longitude }, (location) => {
-			console.log('Location name', location);
+			//console.log('Location name', location);
 			$infoDiv.innerHTML = '<strong>' + location + '</strong>';
 		});
 	})

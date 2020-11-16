@@ -22,7 +22,7 @@ async function geoLocate(location) {
 
 function getCelestialCoords(lat, long) {
     let dec = lat;  //latitude from geolocation should coorespond with angle of declination (range: 0-90)
-    let ra = (long < 0) ? ((long + 360)/15) : (long / 15); //right ascention (range: 0-24)
+    let ra = (long < 0) ? ((long + 360)/15) : (long / 15); //right ascention in hours (range: 0-24)
 
     return { dec: round(dec, 1), ra: round(ra, 1) }
 }

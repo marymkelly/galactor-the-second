@@ -3,7 +3,6 @@ const $leftBtn = document.querySelector('#button-left');
 const $rightBtn = document.querySelector('#button-right');
 const $aladinContainer = document.querySelector('#aladin-lite-div');
 const $aladinFocusedContainer = document.querySelector('#aladin-lite-div2');
-let objSelected;
 
 let aladin = A.aladin('#aladin-lite-div',
                   {
@@ -25,7 +24,6 @@ let aladinFocused = A.aladin('#aladin-lite-div2',
                   {
                     survey: 'P/DSS2/color', // set initial image survey
                     fov: .5, // initial field of view in degrees
-                    zoom: 2,
                     cooFrame: 'ICRSd', // set galactic frame
                     showReticle: false,
                     showZoomControl: false,// the zoom control GUI is displayed (plus/minus buttons)	
@@ -38,12 +36,18 @@ let aladinFocused = A.aladin('#aladin-lite-div2',
                     fullScreen: false
 });
 
+let cat = A.catalog({color: 'blue', sourceSize: 14, shape: 'circle', onClick: 'objectClicked' });
+let objSelected;
+
+$rightBtn.addEventListener('click', () => { getNextSource('right') });
+$leftBtn.addEventListener('click', () => { getNextSource('left') });
+
 aladin.setFovRange(35, 40)
 aladin.setFov(40)
 aladinFocused.setFovRange(.3, 2)
 aladin.removeLayers()
 
-let cat = A.catalog({color: 'blue', sourceSize: 14, shape: 'circle', onClick: 'objectClicked' });
+
 
 socket.on('starData', (data) => {  
   const sourcesArr = [];
@@ -66,11 +70,7 @@ socket.on('starData', (data) => {
   cat.addSources(sourcesArr);
   //update aladin container
   updateStarView(sourcesArr[0]);
-
 })
-
-$rightBtn.addEventListener('click', () => { getNextSource('right') });
-$leftBtn.addEventListener('click', () => { getNextSource('left') });
 
 // define function triggered when  a source is hovered
 aladin.on('objectHovered', function(object) {
@@ -85,13 +85,17 @@ aladin.on('objectHovered', function(object) {
 // define function triggered when an object is clicked
 aladin.on('objectClicked', function(object) {
   if (object) {
-      objSelected.deselect();
+      if(objSelected){
+        objSelected.deselect();
+      }
+      console.log(object)
       updateStarView(object);
   }
   else {
       updateStarView(objSelected); //will prevent deselect when clicking outside of source object
   }
 });
+
 
 function getNextSource(btn) { //changes selected source based on left and right buttons
   let nextSource;
