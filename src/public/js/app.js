@@ -1,12 +1,19 @@
 const socket = io();
 
-socket.emit('join', (res) => {
-	document.querySelector('#button-left').classList.remove('hidden');
-	document.querySelector('#button-right').classList.remove('hidden');
-	document.querySelector('#aladin-lite-div').classList.add('scale-in');
-	document.querySelector('#aladin-lite-div2').classList.add('scale-in');
-	$infoDiv.innerHTML = '<strong>' + res + '</strong>';
-})
+socket.on('connected', () => {
+	console.log('on page');
+	$infoDiv.innerHTML = 'Loading....';
+
+	socket.emit('join', (res) => {
+		document.querySelector('#button-left').classList.remove('hidden');
+		document.querySelector('#button-right').classList.remove('hidden');
+		document.querySelector('#aladin-lite-div').classList.add('scale-in');
+		document.querySelector('#aladin-lite-div2').classList.add('scale-in');
+		$infoDiv.innerHTML = '<strong>' + res + '</strong>';
+	})
+});
+
+
 
 const $locationInput = document.querySelector('#location-input');
 const $infoDiv = document.querySelector('#infoDiv2');

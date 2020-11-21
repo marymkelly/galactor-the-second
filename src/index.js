@@ -22,6 +22,8 @@ app.engine('.html', require('ejs').__express); //registers ejs as html
 app.set('view engine', 'html'); // removes need to add file extension in render method
 
 io.on('connection', async (socket) => {
+	socket.emit('connected');
+	
 	console.log('New Websocket Connection!');
 
 	socket.on('join', async (res) => {
