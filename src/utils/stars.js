@@ -1,7 +1,7 @@
 const axios = require('axios');
 const xml2js = require('xml2js'); 
 
-	async function getStars(ra = 12, dec = 45) {
+	async function getStars(ra = 28.4, dec = -80.6) { //default Cape Canaveral
 		//retrieve nearby stars from database
 		const getStarsUrl = `http://server2.sky-map.org/getstars.jsp?ra=${ra}&de=${dec}&angle=30&max_stars=10`;
 		

@@ -1,22 +1,21 @@
-const socket = io();
+const socket = io();	
+const $locationInput = document.querySelector('#location-input');
+const $infoDiv = document.querySelector('#infoDiv2');
+let current;
 
 socket.on('connected', () => {
-	console.log('on page');
+	let btns = document.querySelectorAll('button');
 	$infoDiv.innerHTML = 'Loading....';
 
-	socket.emit('join', (res) => {
+	socket.emit('getLocation', window.location.search, (res) => {
 		document.querySelector('#button-left').classList.remove('hidden');
 		document.querySelector('#button-right').classList.remove('hidden');
 		document.querySelector('#aladin-lite-div').classList.add('scale-in');
 		document.querySelector('#aladin-lite-div2').classList.add('scale-in');
-		$infoDiv.innerHTML = '<strong>' + res + '</strong>';
-	})
+		btns.forEach(btn => { btn.classList.remove('disabled') });
+		updatePageOnLoad(res);
+	});
 });
-
-
-
-const $locationInput = document.querySelector('#location-input');
-const $infoDiv = document.querySelector('#infoDiv2');
 
 document.querySelector('#location-form').addEventListener('submit',  (e) => {
 	e.preventDefault();
@@ -26,7 +25,7 @@ document.querySelector('#location-form').addEventListener('submit',  (e) => {
 	$infoDiv.innerHTML = 'Loading....';
 
 	socket.emit('getLocation', location, (res) => {
-		$infoDiv.innerHTML = '<strong>' + res + '</strong>';
+		updatePageOnLoad(res);
 	});
   })
 
@@ -39,12 +38,23 @@ document.querySelector('#send-location').addEventListener('click', (e) => {
 	}
 	$infoDiv.innerHTML = 'Loading....';
 	navigator.geolocation.getCurrentPosition((position) => {
-		socket.emit('getLocation', { lat: position.coords.latitude, lng: position.coords.longitude }, (location) => {
-			$infoDiv.innerHTML = '<strong>' + location + '</strong>';
+		socket.emit('getLocation', { lat: position.coords.latitude, lng: position.coords.longitude }, (res) => {
+			updatePageOnLoad(res);
 		});
 	})
 })
 
+function updatePageOnLoad(res) {
+
+	if(!res) {
+		$infoDiv.innerHTML = '<strong>' + current + '</strong>';
+		$infoDiv.insertAdjacentHTML('beforeend', '<p class="red-text">Invalid Search: No Update to View</p>');
+		return;
+	}
+
+	current = res;
+	$infoDiv.innerHTML = '<strong>' + current + '</strong>';
+}
 
 
 

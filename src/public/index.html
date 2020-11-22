@@ -12,29 +12,29 @@
 <body>
 	<div class="container">
 		<div class="row">
-			<form id="location-form" class="col s9">
-				<div class="input-field col s9">
+			<form id="location-form" class="col s12 l9">
+				<div class="input-field col s7 l9">
 					<input id="location-input" class="validate" type="text" name="location" placeholder="Location" autocomplete="off" required>
 				</div>
-				<div class="input-field col s3">
-					<button id="location-submit" class="btn waves-effect waves-light" name="submit" type="submit">Submit Location</button>
+				<div class="input-field col s3 l3">
+					<button id="location-submit" class="btn waves-effect waves-light indigo darken-4 disabled" name="submit" type="submit">Submit Location</button>
 				</div>		
 			</form>
-			<div class="input-field col s3">
-				<button id='send-location' class="btn waves-effect waves-light">Use My Location</button>
+			<div class="input-field col s3 l3">
+				<button id='send-location' class="btn waves-effect waves-light indigo accent-4 disabled">Use My Location</button>
 			</div>
 		</div>
 
 		<div class="row">
-			<div class="col s5">
+			<div class="col s12 l5">
 				<div id='infoDiv2'>&nbsp; </div>
 				<div id='aladin-lite-div' class="aladin scale-transition scale-out" style='width: 300px; height:300px;'></div>
 				<div>
-					<button id="button-left" class="btn waves-effect waves-light hidden">Prev</button>
-					<button id="button-right" class="btn waves-effect waves-light hidden">Next</button>
+					<button id="button-left" class="btn waves-effect waves-light indigo accent-4 hidden disabled">Prev</button>
+					<button id="button-right" class="btn waves-effect waves-light indigo accent-4 hidden disabled">Next</button>
 				</div>
 			</div>
-			<div class="col s7">
+			<div class="col s12 l7">
 				<div id='infoDiv'>&nbsp; </div>
 				<div id='aladin-lite-div2' class="aladin scale-transition scale-out" style='width: 500px; height:500px;'></div>
 			</div>
