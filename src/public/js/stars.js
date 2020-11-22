@@ -24,6 +24,7 @@ let aladinFocused = A.aladin('#aladin-lite-div2',
                   {
                     survey: 'P/DSS2/color', // set initial image survey
                     cooFrame: 'ICRSd', // set galactic frame
+                    fov: 1,
                     showReticle: false,
                     showZoomControl: false,// the zoom control GUI is displayed (plus/minus buttons)	
                     showFullscreenControl: false, 

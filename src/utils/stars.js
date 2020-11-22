@@ -25,14 +25,18 @@ const xml2js = require('xml2js');
 					return console.log(e);
 				}
 			});
+
+			if(!validateStars){
+				throw new Error('no stars found')
+			}
 			// wait for promises in map to resolve
 			const validateResults = await Promise.all(validateStars);
 			//filter out undefined values and return star objects as array
-			const stars = validateResults.filter((stars) => stars);	
-			return stars;
+			return validateResults.filter((stars) => stars);	
 
 		} catch (error) {
 			console.error(error);
+			return;
 		}
 	}
 

@@ -1,26 +1,36 @@
 const axios = require('axios');
 
 async function geoLocate(location) {
-    const query = (typeof location === 'object') ? `latlng=${location.lat},${location.lng}` : `address=${location}`;
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?`+ query +`&key=${process.env.GEOCODER_API_KEY}`; 
-    
-    try{ 
-        const data = await axios.get(url);
+    if(typeof location === 'string'){
+        const url = `https://maps.googleapis.com/maps/api/place/queryautocomplete/json?input=` + encodeURI(location) + `&types=geocode&key=${process.env.GEOCODER_API_KEY}`
+        
+        return await axios.get(url).then(async (res) => { 
+            return res.data.predictions[0] ? await getPlace(res.data.predictions[0].place_id) : new Error('no location found');
+        }).catch((e) => { return console.log(e)});
 
-        if(!data.data.results[0]) {
-            throw new Error('no location found');
-        }
+    } else {
+        return await getPlace(location);
+    }
 
-        const coords =  data.data.results[0].geometry.location;
-        const celestial = getCelestialCoords(coords.lat, coords.lng);
-        const formattedLocation = data.data.results[0].formatted_address;
+    async function getPlace(input) {
+        let query = (typeof input === 'object') ? `latlng=${input.lat},${input.lng}&location_type=APPROXIMATE` : `place_id=${input}`;
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?${query}&key=${process.env.GEOCODER_API_KEY}`; 
 
-        coords.dec = celestial.dec;
-        coords.ra = celestial.ra;
+        return await axios.get(url).then((res) => {
+            if(!res.data.results[0]) {
+                throw new Error('no location found');
+            }
 
-        return { coords, formattedLocation };
-    } catch (e) {
-        console.error(e.message);
+            const coords =  res.data.results[0].geometry.location;
+            coords.celestial = getCelestialCoords(coords.lat, coords.lng);
+            const formattedLocation = res.data.results[0].formatted_address;
+
+            return ({ coords, formattedLocation })
+
+        }).catch((e) => {
+            console.log(e);
+            return;
+        })
     }
 }
 
@@ -28,7 +38,7 @@ function getCelestialCoords(lat, long) {
     let dec = lat;  //latitude from geolocation should coorespond with angle of declination (range: 0-90)
     let ra = (long < 0) ? ((long + 360)/15) : (long / 15); //right ascention in hours (range: 0-24)
 
-    return { dec: round(dec, 6), ra: round(ra, 6) }
+    return { dec: round(dec, 7), ra: round(ra, 7) }
 }
 
 function round(num, decimalPlaces) {

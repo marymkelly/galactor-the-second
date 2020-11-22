@@ -6,7 +6,6 @@ const bodyParser = require('body-parser');
 const socketio = require('socket.io');
 const querystring = require('querystring');
 
-//const ejs = require('ejs');
 const getStars = require('./utils/stars');
 const geoLocate = require('./utils/geocode');
 
@@ -18,14 +17,10 @@ const port = process.env.PORT || 3000;
 //express 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
-//app.set('views', path.join(__dirname, 'public')); //redirecting views to public dir
-//app.engine('.html', require('ejs').__express); //registers ejs as html
-//app.set('view engine', 'html'); // removes need to add file extension in render method
 
 io.on('connection', async (socket) => {
 
 	socket.emit('connected');
-
 	console.log('New Websocket Connection!');
 
 	socket.on('getLocation', async (pos, res) => {
@@ -35,43 +30,32 @@ io.on('connection', async (socket) => {
 			pos =  searchedParams.location ? searchedParams.location : 'Cape Canaveral';
 		}
 
-		if (pos === '') {
-			pos = 'Disney';
+		if (!pos) {
+			pos = 'Cape Canaveral';
 		}
 
-		const location = await updateLocation(pos);
-		console.log(location)
-		res(location);
-	})
-
-		async function updateLocation(data){
-			const loc = await geoLocate(data).then(async (location) => {
+		const place = await geoLocate(pos).then(async (location) => {
 				if(!location){
 					throw new Error('no location');
 				}
-				await getStars(location.coords.ra, location.coords.dec).then((res) => {
-					socket.emit('starData', { res , loc: location.coords });
+				await getStars(location.coords.celestial.ra, location.coords.celestial.dec).then((res) => {
+					socket.emit('starData', { res , loc: location.coords.celestial });
 				})
-				return location.formattedLocation;
+				return location;
 			}).catch((e) => {
 				console.log('error', e)
 				return;
 			});
-
-			console.log(loc);
-			return loc;	
-		}
+		res(place.formattedLocation);
+	})
 });
 
 //routes
 app.get('/', function (req, res) {
-	console.log("indexroute")
-	console.log(req)
 	res.render('index');
 });
 
 app.get('/stars', (req, res) => {
-   console.log("starroute")
    res.render('stars');
 });
 

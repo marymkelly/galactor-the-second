@@ -32,17 +32,37 @@ document.querySelector('#location-form').addEventListener('submit',  (e) => {
 //get user location
 document.querySelector('#send-location').addEventListener('click', (e) => {
 	e.preventDefault();
+	let opt = {
+		  enableHighAccuracy: false,
+		  timeout: 100,
+		  maximumAge: 0
+	}
 
 	if(!navigator.geolocation){
 		return alert('Geolocation not supported by browser');
 	}
+
 	$infoDiv.innerHTML = 'Loading....';
-	navigator.geolocation.getCurrentPosition((position) => {
+	navigator.geolocation.getCurrentPosition(success, error, {
+		maximumAge: 0,
+  		timeout: 6000,
+	});
+
+	function success(position) {
 		socket.emit('getLocation', { lat: position.coords.latitude, lng: position.coords.longitude }, (res) => {
 			updatePageOnLoad(res);
 		});
-	})
+	};
+
+	function error(e) {
+		console.log('navigator error', e);
+		if(e.code === GeolocationPositionError.TIMEOUT) {
+			console.log('TIMEOUT ERROR');
+			return alert('Error: Timed out');
+		}
+	}
 })
+
 
 function updatePageOnLoad(res) {
 
