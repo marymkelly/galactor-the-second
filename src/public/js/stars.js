@@ -85,7 +85,6 @@ aladin.on('objectClicked', function(object) {
       if(objSelected){
         objSelected.deselect();
       }
-      console.log(object)
       updateStarView(object);
   }
   else {

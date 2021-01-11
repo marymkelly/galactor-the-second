@@ -3,9 +3,8 @@ const axios = require('axios');
 async function geoLocate(location) {
     if(typeof location === 'string'){
         const url = `https://maps.googleapis.com/maps/api/place/queryautocomplete/json?input=` + encodeURI(location) + `&types=geocode&key=${process.env.GEOCODER_API_KEY}`
-        
         return await axios.get(url).then(async (res) => { 
-            return res.data.predictions[0] ? await getPlace(res.data.predictions[0].place_id) : new Error('no location found');
+            return res.data.predictions[0] ? await getPlace(res.data.predictions[0].place_id) : new Error('no location found by google api: check location or API key'); 
         }).catch((e) => { return console.log(e)});
 
     } else {
