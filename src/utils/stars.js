@@ -21,22 +21,32 @@ const xml2js = require('xml2js');
 					}
 						star.target = parsedData.Sesame.target;
 						return star;
-				} catch (e) {
-					return console.log(e);
+				} catch (error) { 
+					console.log('vizier database error', error);
+					return { error };
 				}
-			});
+			}); 
 
-			if(!validateStars){
-				throw new Error('no stars found')
-			}
+			// if(!validateStars){
+			// 	throw new Error('no stars found'); 
+			// }
+
 			// wait for promises in map to resolve
 			const validateResults = await Promise.all(validateStars);
+
+			if(!validateResults){
+				throw new Error('No stars found');
+			}
 			//filter out undefined values and return star objects as array
-			return validateResults.filter((stars) => stars);	
+			return {stars: validateResults.filter((stars) => stars)};	
 
 		} catch (error) {
-			console.error(error);
-			return;
+			// if(error.isAxiosError){
+			// 	console.log(error.response.status, error.response.data);
+			// 	return { error }
+			// }
+ 			console.error(error);
+			return { error };
 		}
 	}
 

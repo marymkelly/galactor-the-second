@@ -1,7 +1,7 @@
-const socket = io();	
+const socket = io();
 const $locationInput = document.querySelector('#location-input');
 const $infoDiv = document.querySelector('#infoDiv2');
-let current;
+let current = "";
 
 socket.on('connected', () => {
 	let btns = document.querySelectorAll('button');
@@ -17,7 +17,7 @@ socket.on('connected', () => {
 	});
 });
 
-document.querySelector('#location-form').addEventListener('submit',  (e) => {
+document.querySelector('#location-form').addEventListener('submit', (e) => {
 	e.preventDefault();
 	const location = $locationInput.value;
 
@@ -27,55 +27,111 @@ document.querySelector('#location-form').addEventListener('submit',  (e) => {
 	socket.emit('getLocation', location, (res) => {
 		updatePageOnLoad(res);
 	});
-  })
+})
 
 //get user location
-document.querySelector('#send-location').addEventListener('click', (e) => {
+document.querySelector('#send-my-location').addEventListener('click', (e) => {
 	e.preventDefault();
-	let opt = {
-		  enableHighAccuracy: false,
-		  timeout: 100,
-		  maximumAge: 0
+	const opt = {
+		enableHighAccuracy: false,
+		timeout: 6000,
+		maximumAge: 0
 	}
-
-	if(!navigator.geolocation){
-		return alert('Geolocation not supported by browser');
-	}
-
-	$infoDiv.innerHTML = 'Loading....';
-	navigator.geolocation.getCurrentPosition(success, error, {
-		maximumAge: 0,
-  		timeout: 6000,
-	});
 
 	function success(position) {
 		socket.emit('getLocation', { lat: position.coords.latitude, lng: position.coords.longitude }, (res) => {
 			updatePageOnLoad(res);
+			navigator.geolocation.clearWatch();
 		});
 	};
 
 	function error(e) {
 		console.log('navigator error', e);
-		if(e.code === GeolocationPositionError.TIMEOUT) {
-			console.log('TIMEOUT ERROR');
-			return alert('Error: Timed out');
+		if (e.code === GeolocationPositionError.TIMEOUT) {
+			updatePageOnLoad({ error: e });
+			alert('Error: Timed out');
+			return
 		}
 	}
+
+	if (!navigator.geolocation) {
+		return alert('Geolocation not supported by browser');
+	}
+
+	$infoDiv.innerHTML = 'Loading....';
+	navigator.geolocation.getCurrentPosition(success, error, opt);
 })
 
 
 function updatePageOnLoad(res) {
+	if (!res.formattedLocation) {
+		let errorText = 'Invalid Search: No Update to View';
+		// console.log('res', res, res instanceof GeolocationPositionError, res.constructor === GeolocationPositionError, (Object(GeolocationPositionError) == GeolocationPositionError));
 
-	if(!res) {
+		if (res.error instanceof GeolocationPositionError) {
+			errorText = 'Gelocation Error: ' + res.error.message;
+		}
+
+		if (res.error.isAxiosMessage && res.error.response) {
+			console.log('axios res data', res.error.response.data);
+			errorText === axiosErrMsg(res.error.response.data);
+		}
+
 		$infoDiv.innerHTML = '<strong>' + current + '</strong>';
-		$infoDiv.insertAdjacentHTML('beforeend', '<p class="red-text">Invalid Search: No Update to View</p>');
+		$infoDiv.insertAdjacentHTML('beforeend', `<p class="red-text">${errorText}</p>`);
 		return;
 	}
 
-	current = res;
+	current = res.formattedLocation;
 	$infoDiv.innerHTML = '<strong>' + current + '</strong>';
+	return;
 }
 
+function axiosErrMsg(str = "") {
+	let errorMsg = 'Server Error';
 
+	const from = `</h1>`;
+	const to = `</body>`;
 
+	if (str.includes(from) && str.includes(to)) {
+		const start = (str.indexOf(from) + from.length);
+		const end = str.indexOf(to);
+
+		const subStr = str.substring(start, end);
+		errorMsg = subStr;
+	}
+
+	return errorMsg;
+}
+
+//fix passive event issues
+jQuery.event.special.touchstart = {
+	setup: function (_, ns, handle) {
+		if (ns.includes("noPreventDefault")) {
+			this.addEventListener("touchstart", handle, { passive: false });
+		} else {
+			this.addEventListener("touchstart", handle, { passive: true });
+		}
+	}
+};
+
+jQuery.event.special.touchmove = {
+	setup: function (_, ns, handle) {
+		if (ns.includes("noPreventDefault")) {
+			this.addEventListener("touchmove", handle, { passive: false });
+		} else {
+			this.addEventListener("touchmove", handle, { passive: true });
+		}
+	}
+};
+
+jQuery.event.special.mousewheel = {
+	setup: function (_, ns, handle) {
+		if (ns.includes("noPreventDefault")) {
+			this.addEventListener("wheel", handle, { passive: false });
+		} else {
+			this.addEventListener("wheel", handle, { passive: true });
+		}
+	}
+};
 

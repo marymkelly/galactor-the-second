@@ -5,7 +5,7 @@ async function geoLocate(location) {
         const url = `https://maps.googleapis.com/maps/api/place/queryautocomplete/json?input=` + encodeURI(location) + `&types=geocode&key=${process.env.GEOCODER_API_KEY}`
         return await axios.get(url).then(async (res) => { 
             return res.data.predictions[0] ? await getPlace(res.data.predictions[0].place_id) : new Error('no location found by google api: check location or API key'); 
-        }).catch((e) => { return console.log(e)});
+        }).catch((e) => { return console.log(e) });
 
     } else {
         return await getPlace(location);
@@ -17,7 +17,7 @@ async function geoLocate(location) {
 
         return await axios.get(url).then((res) => {
             if(!res.data.results[0]) {
-                throw new Error('no location found');
+                throw new Error('no location found from geocode');
             }
 
             const coords =  res.data.results[0].geometry.location;
@@ -28,7 +28,7 @@ async function geoLocate(location) {
 
         }).catch((e) => {
             console.log(e);
-            return;
+            return { e: error };
         })
     }
 }
