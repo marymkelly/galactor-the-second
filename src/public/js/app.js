@@ -1,11 +1,13 @@
 const socket = io();
 const $locationInput = document.querySelector('#location-input');
-const $infoDiv = document.querySelector('#infoDiv2');
+const $infoDiv = document.querySelector('#active-search');
+const $loader = document.querySelector('#loading-loader');
 let current = "";
 
 socket.on('connected', () => {
 	let btns = document.querySelectorAll('button');
 	$infoDiv.innerHTML = 'Loading....';
+	$loader.removeAttribute('hidden');
 
 	socket.emit('getLocation', window.location.search, (res) => {
 		document.querySelector('#button-left').classList.remove('hidden');
@@ -23,6 +25,7 @@ document.querySelector('#location-form').addEventListener('submit', (e) => {
 
 	$locationInput.value = '';
 	$infoDiv.innerHTML = 'Loading....';
+	$loader.removeAttribute('hidden');
 
 	socket.emit('getLocation', location, (res) => {
 		updatePageOnLoad(res);
@@ -41,8 +44,8 @@ document.querySelector('#send-my-location').addEventListener('click', (e) => {
 	function success(position) {
 		socket.emit('getLocation', { lat: position.coords.latitude, lng: position.coords.longitude }, (res) => {
 			updatePageOnLoad(res);
-			navigator.geolocation.clearWatch();
 		});
+		return;
 	};
 
 	function error(e) {
@@ -59,12 +62,14 @@ document.querySelector('#send-my-location').addEventListener('click', (e) => {
 	}
 
 	$infoDiv.innerHTML = 'Loading....';
+	$loader.removeAttribute('hidden');
 	navigator.geolocation.getCurrentPosition(success, error, opt);
 })
 
 
 function updatePageOnLoad(res) {
 	if (!res.formattedLocation) {
+		console.log('REDERR', res.error)
 		let errorText = 'Invalid Search: No Update to View';
 		// console.log('res', res, res instanceof GeolocationPositionError, res.constructor === GeolocationPositionError, (Object(GeolocationPositionError) == GeolocationPositionError));
 
@@ -82,6 +87,8 @@ function updatePageOnLoad(res) {
 		return;
 	}
 
+	$locationInput.value = '';
+	$loader.setAttribute('hidden', true);
 	current = res.formattedLocation;
 	$infoDiv.innerHTML = '<strong>' + current + '</strong>';
 	return;

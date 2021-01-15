@@ -4,12 +4,31 @@ $primary-color: #222222;
 body {
     font:  100% $font-stack;
     color: $primary-color;  
+    background-color: white;
 }
 
 .hidden {
     visibility: hidden;
 }
 
+.container {
+    padding: 1.5em 0;
+}
+
+.info__container {
+    display: flex;
+}
+
+#loading-loader {
+    margin-left: 1.5em;
+}
+
+// .input-field input[type=text]:focus {
+//     border-bottom: 4px solid green;
+    
+// }
+
 .input-field input[type=text]:focus {
-	border-bottom: 1px solid #304ffe;
+    border-bottom: 1px solid #304ffe;
+    
 }

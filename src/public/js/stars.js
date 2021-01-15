@@ -1,4 +1,4 @@
-const $infoLineOne = document.querySelector('#infoDiv');
+const $infoLineOne = document.querySelector('#active-star');
 const $leftBtn = document.querySelector('#button-left');
 const $rightBtn = document.querySelector('#button-right');
 const $aladinContainer = document.querySelector('#aladin-lite-div');

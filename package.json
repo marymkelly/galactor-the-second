@@ -2,12 +2,17 @@
   "name": "galactor2",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon -r dotenv/config ./src/server.js dotenv_config_path=./config/dev.env --exec babel-node",
+    "dev": "nodemon -r dotenv/config src/server.js dotenv_config_path=./config/dev.env --exec babel-node",
     "sass:compile": "sass --load-path sass src/public/css/scss/styles.scss src/public/css/styles.css",
+    "watch-sass": "sass src/public/css/scss/styles.scss src/public/css/styles.css --watch",
     "test": "NODE_ENV=test jest --config=jest.config.json --watch"
+  },
+  "nodemonConfig": {
+    "ignore": ["*.test.js", "./config/playground.js"],
+    "ext": "js,mjs,json,css"
   },
   "keywords": [],
   "author": "",

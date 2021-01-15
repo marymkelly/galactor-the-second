@@ -1,5 +1,5 @@
 //modules
-import "@babel/polyfill";
+import '@babel/polyfill';
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
