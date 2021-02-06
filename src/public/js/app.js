@@ -84,6 +84,7 @@ function updatePageOnLoad(res) {
 
 		$infoDiv.innerHTML = '<strong>' + current + '</strong>';
 		$infoDiv.insertAdjacentHTML('beforeend', `<p class="red-text">${errorText}</p>`);
+		$loader.setAttribute('hidden', true);
 		return;
 	}
 
