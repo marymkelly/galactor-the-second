@@ -11,7 +11,10 @@
     "test": "NODE_ENV=test jest --config=jest.config.json --watch"
   },
   "nodemonConfig": {
-    "ignore": ["*.test.js", "./config/playground.js"],
+    "ignore": [
+      "*.test.js",
+      "./config/playground.js"
+    ],
     "ext": "js,mjs,json,css"
   },
   "keywords": [],
@@ -24,6 +27,7 @@
     "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
+    "firebase": "^8.2.6",
     "socket.io": "^2.3.0",
     "xml2js": "^0.4.23"
   },

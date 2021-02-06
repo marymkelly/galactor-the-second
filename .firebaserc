@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "portsite-b008f"
+  },
+  "targets": {
+    "portsite-b008f": {
+      "hosting": {
+        "galactor": [
+          "galactor"
+        ]
+      }
+    }
+  }
+}
