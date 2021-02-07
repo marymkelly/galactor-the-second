@@ -1,0 +1,7 @@
+/config/
+/node_modules/
+*.log
+.gitignore
+.firebaserc
+/functions/
+/src/public/stars.html

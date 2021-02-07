@@ -4,3 +4,4 @@ config
 .firebaserc
 *.log
 functions/
+src/public/stars.html

@@ -9,20 +9,6 @@ const port = process.env.PORT || 3000;
 const querystring = require('querystring');
 const getStars = require('./utils/stars');
 const geoLocate = require('./utils/geocode');
-const sassChild = require('./sassdemon.js');
-
-const child = sassChild();
-
-process
-	.on('exit', (code) => { 	// Handle normal exits
-		console.log(` exit code ${code} `);
-		process.exit(code);
-	})
-	.on('SIGINT', () => { 	// Handle CTRL+C
-		process.kill(child.pid, 'SIGHUP'); //sass 
-		process.kill(process.ppid, 'SIGHUP'); //nodemon
-		process.exit(0);
-	})
 
 //server connection
 server.listen(port, () => {
