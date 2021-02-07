@@ -1,11 +1,12 @@
 //modules
-import '@babel/polyfill';
+// import '@babel/polyfill';
+require("@babel/polyfill")
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const app = express();
 
-import { firebase } from './firebase/firebase';
+const firebase = require('./firebase/firebase');
 
 //express 
 app.use(bodyParser.urlencoded({ extended: false }))

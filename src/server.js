@@ -1,6 +1,6 @@
 const http = require('http');
 const socketio = require('socket.io');
-const app = require("./index");
+const app = require("./app");
 
 const server = http.createServer(app);
 const io = socketio(server);

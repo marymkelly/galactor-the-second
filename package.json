@@ -2,9 +2,9 @@
   "name": "galactor2",
   "version": "1.0.0",
   "description": "",
-  "main": "",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "node -r dotenv/config src/server.js dotenv_config_path=./config/dev.env",
     "dev": "nodemon -r dotenv/config src/server.js dotenv_config_path=./config/dev.env --exec babel-node",
     "sass:compile": "sass --load-path sass src/public/css/scss/styles.scss src/public/css/styles.css",
     "watch-sass": "sass src/public/css/scss/styles.scss src/public/css/styles.css --watch",

@@ -1,5 +1,8 @@
-import firebase from 'firebase/app';
-import 'firebase/analytics';
+// import firebase from 'firebase/app';
+// import 'firebase/analytics';
+
+const firebase = require('firebase/app');
+require('firebase/analytics');
 
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
@@ -14,4 +17,6 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-export { firebase };
+// export { firebase };
+
+module.exports = { firebase }
