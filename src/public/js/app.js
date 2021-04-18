@@ -1,10 +1,21 @@
 const socket = io();
-const $locationInput = document.querySelector('#location-input');
+ const $locationInput = document.querySelector('#location-input');
 const $infoDiv = document.querySelector('#active-search');
 const $loader = document.querySelector('#loading-loader');
 let current = "";
+let timeoutID;
+
+function loadingAlert() {
+  timeoutID = window.setTimeout(() => { $infoDiv.innerHTML = 'Still working on it!'; return; }, 4*1000);
+}
+
+function clearAlert() {
+  window.clearTimeout(timeoutID);
+}
 
 socket.on('connected', () => {
+	loadingAlert();
+
 	let btns = document.querySelectorAll('button');
 	$infoDiv.innerHTML = 'Loading....';
 	$loader.removeAttribute('hidden');
@@ -68,6 +79,8 @@ document.querySelector('#send-my-location').addEventListener('click', (e) => {
 
 
 function updatePageOnLoad(res) {
+	clearAlert();
+
 	if (!res.formattedLocation) {
 		console.log('REDERR', res.error)
 		let errorText = 'Invalid Search: No Update to View';
@@ -143,3 +156,10 @@ jQuery.event.special.mousewheel = {
 	}
 };
 
+//temp for testing
+
+// socket.on('testing', () => {
+// 	console.log('testing')
+// 	$infoDiv.innerHTML = 'Testing';
+// 	$loader.setAttribute('hidden', true);
+// });

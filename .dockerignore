@@ -4,4 +4,3 @@
 .gitignore
 .firebaserc
 /functions/
-/src/public/stars.html

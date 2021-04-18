@@ -18,6 +18,7 @@ server.listen(port, () => {
 io.on('connection', async (socket) => {
 	console.log('New Websocket Connection!');
 	socket.emit('connected');
+	// socket.emit('testing');
 
 	socket.on('getLocation', async (pos, res) => {
 

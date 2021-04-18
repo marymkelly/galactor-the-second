@@ -4,6 +4,53 @@ body {
   background-color: white;
 }
 
+.about {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+}
+.about h1 {
+  font-size: 2.4rem;
+  font-weight: 500;
+  margin-left: 2rem;
+  margin-bottom: 3rem;
+}
+.about h4 {
+  font-size: 1.2rem;
+}
+.about h5 {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.notes {
+  width: 80%;
+  margin: 2rem 0;
+}
+.notes ul {
+  font-weight: 400;
+  font-size: 1.1rem;
+}
+.notes ul li {
+  font-weight: 400;
+  list-style-type: disc;
+  margin: 1rem 0;
+  margin-inline-start: 1.2rem;
+}
+
+h5.asterick {
+  margin-top: 3.2rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.q-group {
+  padding: 0 2rem 1rem 2rem;
+  margin-bottom: 2rem;
+  background-color: rgba(163, 203, 255, 0.12);
+  border-radius: 8px;
+}
+
 .hidden {
   visibility: hidden;
 }
@@ -22,6 +69,115 @@ body {
 
 .input-field input[type=text]:focus {
   border-bottom: 1px solid #304ffe;
+}
+
+.bar {
+  width: 100vw;
+  height: 70px;
+  background-color: #304ffe;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.barflex {
+  height: 100%;
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.barflex a {
+  height: 50px;
+}
+
+.tab {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 1.2rem;
+}
+.tab a img {
+  width: 45px;
+  height: 50px;
+}
+
+.tab.logo {
+  width: 82px;
+  overflow: hidden;
+  transition: all 0.8s ease;
+}
+
+.tab.logo.open {
+  width: 500px;
+  transition: all 0.8s ease;
+}
+
+.tabgroup {
+  display: flex;
+  align-content: center;
+  align-items: center;
+}
+
+.tab.link {
+  padding: 0.4rem 2rem;
+  border-radius: 8px;
+  margin: 0 0.4rem;
+  transition: all 0.8s ease;
+}
+.tab.link p {
+  color: rgba(255, 255, 255, 0.85);
+}
+.tab.link:hover, .tab.link [active] {
+  background-color: rgba(0, 0, 0, 0.12);
+  transition: all 0.8s ease;
+}
+.tab.link:hover *, .tab.link [active] * {
+  color: white;
+}
+.tab.link[active] {
+  font-weight: 700;
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+.logoplate {
+  content: url("/img/name-only.svg");
+  width: 220px;
+  height: 50px;
+  opacity: 0;
+  transition: all 0.8s ease;
+  transition: transform 1s;
+}
+
+.logoplate.open {
+  opacity: 0.85;
+  transition: all 0.8s ease;
+}
+
+.title {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+.title h6 {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.footer-container {
+  bottom: 0;
+  width: 100vw;
+  margin-top: 2rem;
+  color: darkgrey;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  font-size: 0.8rem;
+}
+.footer-container a {
+  color: #7f86a7;
+  text-decoration: none;
 }
 
 /*# sourceMappingURL=styles.css.map */

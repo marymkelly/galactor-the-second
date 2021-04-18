@@ -4,16 +4,20 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const app = express();
-const firebase = require('./firebase/firebase');
-
 //express 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(express.static(path.join(__dirname, 'public')))
+app.engine('.html', require('ejs').__express);
+app.set('views', path.join(__dirname, 'views'));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('view engine', 'html');
 
 //routes
 app.get('/', function (req, res) {
-	firebase.analytics()
-	res.send('index');
+	res.render('index');
+});
+
+app.get('/about', function (req, res) {
+	res.render('about');
 });
 
 app.get('*', (req, res) => {
