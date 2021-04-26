@@ -1,6 +1,7 @@
 node_modules
 config
 .DS_Store
-.firebaserc
 *.log
-functions/
+jest.config.json
+*.test.js
+src/tests

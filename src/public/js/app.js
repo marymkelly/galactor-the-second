@@ -1,24 +1,38 @@
 const socket = io();
- const $locationInput = document.querySelector('#location-input');
+const $locationInput = document.querySelector('#location-input');
 const $infoDiv = document.querySelector('#active-search');
 const $loader = document.querySelector('#loading-loader');
 let current = "";
-let timeoutID;
+let timeoutID, intervalID;
 
 function loadingAlert() {
-  timeoutID = window.setTimeout(() => { $infoDiv.innerHTML = 'Still working on it!'; return; }, 4*1000);
+	timeoutID = window.setTimeout(() => { $infoDiv.innerHTML = 'Still working on it!'; callInterval(); return; }, 4 * 1000);
 }
 
 function clearAlert() {
-  window.clearTimeout(timeoutID);
+	window.clearTimeout(timeoutID);
 }
 
-socket.on('connected', () => {
-	loadingAlert();
+function callInterval() {
+	intervalID = window.setInterval(myCallback, 3000, 1);
+	let i = 0;
 
+	function myCallback(int) {
+		i += int;
+		
+		if(i == 1) {
+			$infoDiv.innerHTML = 'Just a little longer...';
+		}
+
+		if(i == 2) {
+			getStarsOnLoad()
+			window.clearTimeout(intervalID);
+		}
+	}
+}
+
+function getStarsOnLoad(){
 	let btns = document.querySelectorAll('button');
-	$infoDiv.innerHTML = 'Loading....';
-	$loader.removeAttribute('hidden');
 
 	socket.emit('getLocation', window.location.search, (res) => {
 		document.querySelector('#button-left').classList.remove('hidden');
@@ -28,6 +42,15 @@ socket.on('connected', () => {
 		btns.forEach(btn => { btn.classList.remove('disabled') });
 		updatePageOnLoad(res);
 	});
+}
+
+socket.on('connected', () => {
+	loadingAlert();
+
+	$infoDiv.innerHTML = 'Loading....';
+	$loader.removeAttribute('hidden');
+
+	getStarsOnLoad();
 });
 
 document.querySelector('#location-form').addEventListener('submit', (e) => {
@@ -156,9 +179,11 @@ jQuery.event.special.mousewheel = {
 	}
 };
 
+
 //temp for testing
 
 // socket.on('testing', () => {
+// 	loadingAlert();
 // 	console.log('testing')
 // 	$infoDiv.innerHTML = 'Testing';
 // 	$loader.setAttribute('hidden', true);
